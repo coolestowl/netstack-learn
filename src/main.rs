@@ -95,11 +95,14 @@ where
         let v = data.as_ref();
         assert!(v.len() >= 28, "not enough data");
 
-        let (head, body, _tail) = unsafe {  v.align_to::<ARPHeader>() };
-        assert!(head.is_empty(), "align failed");
-
-        body[0]
+        unsafe { u8_slice_as_any(v) }
     }
+}
+
+unsafe fn u8_slice_as_any<T: Sized>(p: &[u8]) -> &T {
+    let (head, body, _tail) = p.align_to::<T>();
+    assert!(head.is_empty(), "aligh failed");
+    body[0]
 }
 
 unsafe fn any_as_u8_slice<T: Sized>(p: &T) -> &[u8] {
