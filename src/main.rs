@@ -99,7 +99,7 @@ where
     }
 }
 
-unsafe fn u8_slice_as_any<T: Sized>(p: &[u8]) -> T {
+unsafe fn u8_slice_as_any<T: Sized + Copy>(p: &[u8]) -> T {
     let (head, body, _tail) = p.align_to::<T>();
     assert!(head.is_empty(), "aligh failed");
     body[0]
